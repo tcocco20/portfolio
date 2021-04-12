@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;600&family=Lobster&family=Montserrat:ital,wght@0,300;0,600;1,300;1,600&display=swap");
+
+:root {
+  --col1: #fdf5f8;
+  --col1a: #fdf5f888;
+  --col2: #b4f8ca;
+  --col2a: #b4f8ca88;
+  --col3: #edbfb7;
+  --col3a: #edbfb788;
+  --col4: #6ccff6;
+  --col4a: #6ccff688;
+  --col5: #798071;
+  --col5a: #79807188;
+  --col6: #00120b;
+  --col6a: #00120b88;
+  --sans: "Montserrat", sans-serif;
+  --dis: "Lobster", cursive;
+  --mono: "Inconsolata", monospace;
+  --cur-default: url(/cursors/default.cur), default;
+  --cur-pointer: url(/cursors/pointer.cur), pointer;
+  --cur-text: url(/cursors/text.cur), text;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  cursor: var(--cur-default);
+  font-family: var(--sans);
+  color: var(--col6);
+}
+
+html {
+  background-color: var(--col1);
+}
+
+body {
+  height: 100vh;
+}
+
+a,
+button {
+  cursor: var(--cur-pointer);
+}
+
+input, textarea {
+    cursor: var(--cur-text);
+}
