@@ -11,8 +11,12 @@
   --col4a: #6ccff688;
   --col5: #798071;
   --col5a: #79807188;
-  --col6: #00120b;
-  --col6a: #00120b88;
+  --col6: #02000d;
+  --col6a: #02000d88;
+  --col1s: #F6F0FE;
+  --col2s: #DFABCA;
+  --col3s: #E9C1D4;
+
   --sans: "Montserrat", sans-serif;
   --dis: "Lobster", cursive;
   --mono: "Inconsolata", monospace;
@@ -31,11 +35,11 @@
 }
 
 html {
-  background-color: var(--col1);
+  background: linear-gradient(var(--col6) 50%, var(--col3));
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 a,
@@ -43,6 +47,7 @@ button {
   cursor: var(--cur-pointer);
 }
 
-input, textarea {
-    cursor: var(--cur-text);
+input,
+textarea {
+  cursor: var(--cur-text);
 }
