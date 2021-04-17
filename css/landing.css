@@ -1,0 +1,122 @@
+.landing {
+  height: 100vh;
+  background: url(/images/background_image.jpeg);
+  background-repeat: no-repeat;
+  background-size: 110%;
+  background-position: center top;
+  position: relative;
+}
+
+.landing.t {
+  transition: all 4s ease;
+}
+
+.landing.zoom {
+  background-size: 5000%;
+  background-position: right center;
+}
+
+.landing-overlay {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(
+    var(--col6) 5%,
+    rgba(0, 0, 0, 0) 70%,
+    var(--col6) 95%
+  );
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.star {
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s), 0 0 20px var(--col2s);
+  position: absolute;
+  filter: brightness(1.5);
+  opacity: 0.4;
+  transition: opacity 0.8s ease-in-out, transform 0.7s ease-in-out;
+}
+
+.star.shooting {
+  height: 8px;
+  width: 8px;
+  top: 50%;
+  left: 50%;
+  background-color: var(--col1s);
+}
+
+.star.shooting::before {
+  content: "";
+  height: 8px;
+  width: 100px;
+  position: absolute;
+  top: 0;
+  right: 50%;
+  clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 65%);
+  background-image: linear-gradient(to right, #0000, var(--col1s));
+}
+
+.par-stars {
+  position: absolute;
+  top: 0;
+  right: -100%;
+  height: 100vh;
+  width: 100vw;
+  transition: transform 4s ease, opacity 5s ease;
+  opacity: 0.6;
+}
+
+.par-stars.zoom {
+  transform: scale(50);
+  opacity: 1;
+}
+
+.stars {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.title {
+  position: absolute;
+  top: 10vh;
+  right: 10vw;
+  z-index: 1;
+  text-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s);
+  opacity: 0.5;
+  transition: opacity 1s ease;
+}
+
+.title span {
+  transition: text-shadow 1.5s ease;
+}
+
+.title span.highlight {
+  transition: text-shadow 0.3s ease;
+  text-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s),
+    -5px 5px 5px var(--col4s), -5px 5px 10px var(--col4s),
+    1px -1px 2px var(--col1), 1px -1px 2px var(--col1), 1px -1px 5px var(--col1),
+    0 0 40px var(--col1), 0 0 40px var(--col1), 0 0 60px var(--col1);
+  filter: brightness(1.5);
+}
+
+.name {
+  color: var(--col3sa);
+  font-size: 5vw;
+  font-family: var(--dis);
+}
+
+.subtitle {
+  color: var(--col3sa);
+  font-size: 3.5vw;
+  font-family: var(--dis);
+}
+
+.title.hidden {
+  opacity: 0;
+}

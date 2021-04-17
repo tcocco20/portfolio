@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;600&family=Lobster&family=Montserrat:ital,wght@0,300;0,600;1,300;1,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;600&family=Goldman&family=Montserrat:ital,wght@0,300;0,600;1,300;1,600&display=swap");
 
 :root {
   --col1: #fdf5f8;
@@ -13,12 +13,13 @@
   --col5a: #79807188;
   --col6: #02000d;
   --col6a: #02000d88;
-  --col1s: #F6F0FE;
-  --col2s: #DFABCA;
-  --col3s: #E9C1D4;
+  --col1s: #f6f0fe;
+  --col2s: #dfabca;
+  --col3s: #e9c1d4;
+  --col4s: #593A82;
 
   --sans: "Montserrat", sans-serif;
-  --dis: "Lobster", cursive;
+  --dis: "Goldman", cursive;
   --mono: "Inconsolata", monospace;
   --cur-default: url(/cursors/default.cur), default;
   --cur-pointer: url(/cursors/pointer.cur), pointer;
@@ -40,6 +41,7 @@ html {
 
 body {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a,
