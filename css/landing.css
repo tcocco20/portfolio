@@ -5,6 +5,7 @@
   background-size: 110%;
   background-position: center top;
   position: relative;
+  overflow: hidden;
 }
 
 .landing.t {
@@ -39,6 +40,7 @@
 }
 
 .star.shooting {
+  transition: none;
   height: 8px;
   width: 8px;
   top: 50%;
@@ -93,11 +95,11 @@
 }
 
 .title span {
-  transition: text-shadow 1.5s ease;
+  transition: all 1.5s ease;
 }
 
 .title span.highlight {
-  transition: text-shadow 0.3s ease;
+  transition: none;
   text-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s),
     -5px 5px 5px var(--col4s), -5px 5px 10px var(--col4s),
     1px -1px 2px var(--col1), 1px -1px 2px var(--col1), 1px -1px 5px var(--col1),
@@ -119,4 +121,34 @@
 
 .title.hidden {
   opacity: 0;
+}
+
+.star.falling1 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 2s ease, opacity 4s ease !important;
+}
+
+.star.falling2 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 2.5s ease, opacity 4.5s ease !important;
+}
+
+.star.falling3 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 3s ease, opacity 5s ease !important;
+}
+
+.star.falling4 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 3.5s ease, opacity 5.5s ease !important;
+}
+
+.star.falling5 {
+  top: calc(200vh - 50px) !important;
+  opacity: 0 !important;
+  transition: all 4s ease, opacity 6s ease !important;
 }

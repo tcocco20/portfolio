@@ -16,7 +16,7 @@
   --col1s: #f6f0fe;
   --col2s: #dfabca;
   --col3s: #e9c1d4;
-  --col4s: #593A82;
+  --col4s: #593a82;
 
   --sans: "Montserrat", sans-serif;
   --dis: "Goldman", cursive;
@@ -42,6 +42,7 @@ html {
 body {
   min-height: 100vh;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 a,

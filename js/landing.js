@@ -18,15 +18,18 @@ const makeSpan = (el) => {
   makeSpan(subtitle);
 })();
 
-landing.addEventListener("mousemove", () => {
-  const spans = title.parentNode.querySelectorAll("span");
-  spans.forEach((s) => {
-    if (calcDistance(s) < 80) s.classList.add("highlight");
-    else s.classList.remove("highlight");
+setTimeout(() => {
+  landing.addEventListener("mousemove", () => {
+    const spans = title.parentNode.querySelectorAll("span");
+    spans.forEach((s) => {
+      if (calcDistance(s) < window.innerWidth / 18)
+        s.classList.add("highlight");
+      else s.classList.remove("highlight");
+    });
   });
-});
+}, 5000);
 
-const calcDistance = (el) => {
+export const calcDistance = (el) => {
   el = el.getBoundingClientRect();
   return Math.floor(
     Math.sqrt(
@@ -34,4 +37,4 @@ const calcDistance = (el) => {
         (window.event.clientY - (el.top + el.height / 2)) ** 2
     )
   );
-}
+};
