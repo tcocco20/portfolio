@@ -1,84 +1,96 @@
-import { calcDistance } from "./landing.js";
-
 const colors = ["#F6F0FE", "#DFABCA", "#E9C1D4"],
-  starsM = document.querySelector(".stars-mid"),
-  starsF = document.querySelector(".stars-front"),
-  starsB = document.querySelector(".stars-back");
+  [starLayers, landing, title] = mapTo(
+    "**.stars",
+    ".landing",
+    ".title"
+  ),
+  [starsF, starsB, starsM] = [...starLayers];
 var shooting;
+let timer;
 
 const generateStars = () => {
-  for (let i = 0; i < window.innerWidth / 20; i++) {
-    makeStar(starsF);
-    makeStar(starsB);
-    makeStar(starsM);
-  }
+  for (let i = 0; i < innerWidth / 20; i++) starLayers.forEach(makeStar);
 };
 
 const makeStar = (el) => {
-  const star = document.createElement("div");
-  star.className = "star";
-  star.style.left = Math.floor(Math.random() * 101) + "%";
-  star.style.top = Math.floor(Math.random() * 101) + "%";
-  star.style.opacity = "0";
-  star.style.height = Math.random() * 5 + 2 + "px";
-  star.style.backgroundColor =
-    colors[Math.floor(Math.random() * colors.length)];
-  el.append(star);
-  const h = star.offsetHeight;
-  star.style.width = h + "px";
+  let size = Rand.between(3, 1);
+  if (el === starsM) size += 1.5;
+  if (el === starsF) size += 3;
 
-  setInterval(() => {
-    if (Math.random() > 0.2) {
-      star.style.opacity = Math.random();
+  const large = grow(size) + "px";
+  size += "px";
 
-      setTimeout(() => {
-        star.style.opacity = "0.4";
-      }, 200);
-    }
+  const star = el.build({
+    tag: "div",
+    className: "star",
+    small: size,
+    large,
+    style: {
+      left: Rand.between(101, 0, true) + "%",
+      top: Rand.between(101, 0, true) + "%",
+      opacity: 0.4,
+      height: size,
+      width: size,
+      backgroundColor: Rand.choice(colors),
+      transform: "scale(1)",
+    },
+  })[1];
 
-    if (Math.random() > 0.5) {
-      // star.style.transform = "scale(0.2)";
-
-      setTimeout(() => {
-        star.style.transform = "scale(1)";
-      }, 500);
-    }
-  }, Math.random() * 200 + 500);
+  setInterval(flicker.bind(this, star), Rand.between(700, 500));
 };
 
-(() => {
-  const parStars = document.querySelector(".par-stars");
-  const landing = document.querySelector(".landing");
-  const title = document.querySelector(".title");
-
-  for (let i = 0; i < 500; i++) {
-    makeStar(parStars);
+const flicker = (star) => {
+  if (!star.hasClass("highlight")) {
+    if (Rand.num() > 0.5) {
+      const scale = +star.style.transform.split("scale(")[1].split(")")[0];
+      if (scale > 0.5) star.style.transform = `scale(${Rand.between(0.5)})`;
+      else star.style.transform = `scale(${Rand.between(1, 0.5)})`;
+    }
   }
+};
 
-  setTimeout(() => {
-    landing.classList.remove("zoom");
-    parStars.classList.remove("zoom");
-  }, 500);
+export const initStars = () => {
+  // for (let i = 0; i < innerWidth / 15; i++) makeStar(parStars);
 
-  setTimeout(() => {
-    generateStars();
-    title.classList.remove("hidden");
-  }, 4000);
+  requestAnimationFrame(intro);
+};
 
-  setTimeout(() => {
-    landing.classList.remove("t");
-    landing.addEventListener("mousemove", (e) => {
-      const x = e.clientX - window.innerWidth / 2,
-        y = e.clientY - window.innerHeight / 2;
-      moveStars(landing, x, y, 40);
-      moveStars(starsB, x, y, 20);
-      moveStars(starsM, x, y, 13);
-      moveStars(starsF, x, y, 7);
-      // lightStars();
-    });
-    parStars.remove();
-  }, 5000);
-})();
+const intro = (t) => {
+  if (!timer) timer = t;
+  t = Math.ceil(t - timer);
+  // if (t > 498 && t < 502) zoomOut();
+  if (t >= 2000 && t <= 2016) startShooting();
+  if (t >= 4000 && t <= 4016) prepareLanding();
+  if (t < 5000) requestAnimationFrame(intro);
+  else setUpLanding();
+};
+
+const zoomOut = () => {
+  landing.removeClass("zoom");
+  parStars.removeClass("zoom");
+};
+
+const setUpLanding = () => {
+  landing.removeClass("t");
+  landing.on("mousemove", createParallax);
+};
+
+const prepareLanding = () => {
+  generateStars();
+  title.removeClass("hidden");
+  dropStars();
+};
+
+const createParallax = (e) => {
+  const x = e.clientX - innerWidth / 2,
+    y = e.clientY - innerHeight / 2,
+    els = [landing, ...starLayers],
+    vals = [35, 3, 15, 9];
+
+  for (let i = 0; i < els.length; i++) moveStars(els[i], x, y, vals[i]);
+
+  lightStars();
+};
 
 const moveStars = (el, x, y, n) => {
   el.style.top = -y / n + "px";
@@ -86,52 +98,50 @@ const moveStars = (el, x, y, n) => {
 };
 
 const shootingStar = () => {
-  const sstar = document.createElement("div");
-  const landing = document.querySelector(".landing");
-  sstar.className = "star shooting";
-  landing.append(sstar);
-  sstar.style.transform = `rotate(${
-    Math.random() * 360
-  }deg) translateX(-60vmax) rotate(${
-    Math.random() * 60 - 30
-  }deg) translateX(0vmax) scale(${Math.random() * 0.8 + 0.5})`;
+  // chance star will shoot
+  if (Rand.num() < 0.6 || !document.hasFocus()) return;
+
+  const star = landing.build({
+    tag: "div",
+    className: "star shooting",
+    style: {
+      transform: `rotate(${Rand.between(
+        360
+      )}deg) translateX(-60vmax) rotate(${Rand.between(
+        30,
+        -30
+      )}deg) translateX(0vmax) scale(${Rand.between(1.3, 0.5)})`,
+    },
+  })[1];
+
+  shoot(star);
 };
 
-const shoot = () => {
-  const star = document.querySelector(".star.shooting");
+const shoot = (star) => {
   let transform = star.style.transform.split(" "),
-    tx = +star.style.transform.split("(")[4].split("v")[0],
+    tx = +star.style.transform.split("(")[4].split("v")[0] + 1,
     scale = transform[4];
-  transform.pop();
-  transform.pop();
+  transform.pop(2);
   transform = transform.join(" ");
 
-  tx += 1;
-
   star.style.transform = `${transform} translateX(${tx}vmax) ${scale}`;
-
-  if (tx < 120) requestAnimationFrame(shoot);
+  
+  // distance sstar travels
+  if (tx < 120) requestAnimationFrame(shoot.bind(null, star)); 
   else star.remove();
 };
 
 const startShooting = () => {
-  shooting = setInterval(() => {
-    const chance = Math.random();
-    if (chance > 0.7 && document.hasFocus()) {
-      shootingStar();
-      shoot();
-    }
-  }, 2000);
+  // interval between attempting to shoot star
+  shooting = setInterval(shootingStar, 4000); 
 };
 
-setTimeout(startShooting, 2000);
-
-setTimeout(() => {
-  document.addEventListener("scroll", () => {
-    const y = window.pageYOffset,
-      h = window.innerHeight,
-      w = window.innerWidth,
-      stars = document.querySelectorAll(".star"),
+const dropStars = () => {
+  document.on("scroll", () => {
+    const y = pageYOffset,
+      h = innerHeight,
+      w = innerWidth,
+      stars = $$(".star"),
       fall = ["falling1", "falling2", "falling3", "falling4", "falling5"];
 
     if (y > h * 0.2) {
@@ -143,24 +153,35 @@ setTimeout(() => {
 
     if (y > h * 0.6) {
       stars.forEach((s) => {
-        s.classList.add(fall[Math.floor(Math.random() * fall.length)]);
+        s.addClass(Rand.choice(fall));
         setTimeout(() => s.remove(), 4000);
       });
     } else {
       if (stars.length < 20) generateStars();
     }
   });
-}, 4000);
+};
 
-const grow = (x) => x + (9 - x) + 0.58 * x;
+const grow = (x) => 5 + 0.58 * x;
 
 const lightStars = () => {
-  const stars = document.querySelectorAll(".star:not(.shooting, .highlight)");
+  const stars = $$(".stars-front .star");
+
   stars.forEach((s) => {
-    if (calcDistance(s) < window.innerWidth / 18) {
-      s.classList.add("highlight");
-      s.style.height = grow(s.offsetHeight) + "px";
-      s.style.width = s.offsetHeight + "px";
+    if (calcDistance(s) < innerWidth / 18) {
+      if (!s.hasClass("highlight")) {
+        s.style.transform = "scale(1)";
+        s.addClass("highlight");
+        s.size(s.large);
+      }
+    } else {
+      if (s.hasClass("highlight")) {
+        s.addClass("trans");
+        s.removeClass("highlight");
+        s.size(s.small);
+
+        setTimeout(() => s.classList.remove("trans"), 1000);
+      }
     }
   });
 };

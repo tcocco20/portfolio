@@ -1,40 +1,23 @@
-const title = document.querySelector(".name");
-const subtitle = document.querySelector(".subtitle");
-const landing = document.querySelector(".landing");
+const elements = mapTo(".name", ".subtitle", ".landing", "html"),
+  [title, subtitle, landing, html] = elements;
 
-const makeSpan = (el) => {
-  const letters = el.innerText;
-  el.innerText = "";
+const makeSpan = (...els) => els.forEach((el) => 
+  el.cutText().build(...[...el.data].map((l) => ({ tag: "span", innerText: l }))));
 
-  for (let i = 0; i < letters.length; i++) {
-    const span = document.createElement("span");
-    span.innerText = letters[i];
-    el.append(span);
-  }
+export const initLanding = () => {
+  makeSpan(title, subtitle);
+  setTimeout(readyPage, 5000);
+  html.addClass("loading");
 };
 
-(() => {
-  makeSpan(title);
-  makeSpan(subtitle);
-})();
+const readyPage = () => {
+  landing.addEventListener("mousemove", checkDistance);
+  html.removeClass("loading");
+};
 
-setTimeout(() => {
-  landing.addEventListener("mousemove", () => {
-    const spans = title.parentNode.querySelectorAll("span");
-    spans.forEach((s) => {
-      if (calcDistance(s) < window.innerWidth / 18)
-        s.classList.add("highlight");
-      else s.classList.remove("highlight");
-    });
+const checkDistance = (e) => 
+  $$(".title span").forEach((s) => {
+    if (calcDistance(s, e) < innerWidth / 18) s.addClass("highlight");
+    else s.removeClass("highlight");
   });
-}, 5000);
 
-export const calcDistance = (el) => {
-  el = el.getBoundingClientRect();
-  return Math.floor(
-    Math.sqrt(
-      (window.event.clientX - (el.left + el.width / 2)) ** 2 +
-        (window.event.clientY - (el.top + el.height / 2)) ** 2
-    )
-  );
-};

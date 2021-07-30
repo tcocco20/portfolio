@@ -1,21 +1,21 @@
-.landing {
-  height: 100vh;
-  background: url(/images/background_image.jpeg);
-  background-repeat: no-repeat;
-  background-size: 110%;
-  background-position: center top;
-  position: relative;
-  overflow: hidden;
+html.loading * {
+  cursor: none;
 }
 
-.landing.t {
+.landing {
+  height: 100vh;
+  background-color: var(--col6);
+  position: relative;
+}
+
+/* .landing.t {
   transition: all 4s ease;
 }
 
 .landing.zoom {
   background-size: 5000%;
   background-position: right center;
-}
+} */
 
 .landing-overlay {
   height: 100vh;
@@ -32,11 +32,11 @@
 
 .star {
   border-radius: 50%;
-  box-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s), 0 0 20px var(--col2s);
+  box-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s);
   position: absolute;
   filter: brightness(1.5);
   opacity: 0.4;
-  transition: opacity 0.8s ease-in-out, transform 0.7s ease-in-out;
+  transition: opacity 1s ease-in, transform 0.7s ease-in-out;
 }
 
 .star.shooting {
@@ -151,4 +151,17 @@
   top: calc(200vh - 50px) !important;
   opacity: 0 !important;
   transition: all 4s ease, opacity 6s ease !important;
+}
+
+.star.highlight {
+  opacity: 1;
+  filter: brightness(1.5);
+  text-shadow: 0 0 5px var(--col1s), 0 0 10px var(--col2s),
+    -5px 5px 5px var(--col4s), -5px 5px 10px var(--col4s),
+    1px -1px 2px var(--col1), 1px -1px 2px var(--col1), 1px -1px 5px var(--col1),
+    0 0 40px var(--col1), 0 0 40px var(--col1), 0 0 60px var(--col1);
+}
+
+.star.trans {
+  transition: all 1s ease !important;
 }

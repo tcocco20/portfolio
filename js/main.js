@@ -1,2 +1,7 @@
-import {} from "./stars.js";
-import {} from "./landing.js";
+import { initStars } from "./stars.js";
+import { initLanding } from "./landing.js";
+
+window.history.scrollRestoration = "manual";
+
+initLanding();
+initStars();
