@@ -1,18 +1,12 @@
-const elements = mapTo(".name", ".subtitle", ".landing", "html"),
-  [title, subtitle, landing, html] = elements;
+const elements = mapTo(".name", ".subtitle", ".landing-page"),
+  [title, subtitle, landing] = elements;
 
 const makeSpan = (...els) => els.forEach((el) => 
   el.cutText().build(...[...el.data].map((l) => ({ tag: "span", innerText: l }))));
 
 export const initLanding = () => {
   makeSpan(title, subtitle);
-  setTimeout(readyPage, 5000);
-  html.addClass("loading");
-};
-
-const readyPage = () => {
   landing.addEventListener("mousemove", checkDistance);
-  html.removeClass("loading");
 };
 
 const checkDistance = (e) => 

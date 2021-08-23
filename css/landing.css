@@ -1,21 +1,8 @@
-html.loading * {
-  cursor: none;
-}
-
 .landing {
   height: 100vh;
   background-color: var(--col6);
   position: relative;
 }
-
-/* .landing.t {
-  transition: all 4s ease;
-}
-
-.landing.zoom {
-  background-size: 5000%;
-  background-position: right center;
-} */
 
 .landing-overlay {
   height: 100vh;
@@ -69,11 +56,6 @@ html.loading * {
   opacity: 0.6;
 }
 
-.par-stars.zoom {
-  transform: scale(50);
-  opacity: 1;
-}
-
 .stars {
   position: absolute;
   pointer-events: none;
@@ -117,10 +99,6 @@ html.loading * {
   color: var(--col3sa);
   font-size: 3.5vw;
   font-family: var(--dis);
-}
-
-.title.hidden {
-  opacity: 0;
 }
 
 .star.falling1 {

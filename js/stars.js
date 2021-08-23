@@ -1,15 +1,27 @@
 const colors = ["#F6F0FE", "#DFABCA", "#E9C1D4"],
-  [starLayers, landing, title] = mapTo(
+  [starLayers, landing, landingPage] = mapTo(
     "**.stars",
     ".landing",
-    ".title"
+    ".landing-page"
   ),
   [starsF, starsB, starsM] = [...starLayers];
 var shooting;
-let timer;
 
 const generateStars = () => {
-  for (let i = 0; i < innerWidth / 20; i++) starLayers.forEach(makeStar);
+  for (let i = 0; i < innerWidth / 30; i++) makeStar(starsF);
+  for (let i = 0; i < innerWidth / 5; i++) makeStar(starsB);
+  for (let i = 0; i < innerWidth / 15; i++) makeStar(starsM);
+
+  requestAnimationFrame(starsAppear);
+};
+
+const starsAppear = () => {
+  const stars = $$(".star"),
+    op = +stars[0].style.opacity;
+
+  stars.forEach((star) => (star.style.opacity = op + 0.02));
+
+  if (op < 0.4) requestAnimationFrame(starsAppear);
 };
 
 const makeStar = (el) => {
@@ -28,7 +40,7 @@ const makeStar = (el) => {
     style: {
       left: Rand.between(101, 0, true) + "%",
       top: Rand.between(101, 0, true) + "%",
-      opacity: 0.4,
+      opacity: 0,
       height: size,
       width: size,
       backgroundColor: Rand.choice(colors),
@@ -50,35 +62,10 @@ const flicker = (star) => {
 };
 
 export const initStars = () => {
-  // for (let i = 0; i < innerWidth / 15; i++) makeStar(parStars);
-
-  requestAnimationFrame(intro);
-};
-
-const intro = (t) => {
-  if (!timer) timer = t;
-  t = Math.ceil(t - timer);
-  // if (t > 498 && t < 502) zoomOut();
-  if (t >= 2000 && t <= 2016) startShooting();
-  if (t >= 4000 && t <= 4016) prepareLanding();
-  if (t < 5000) requestAnimationFrame(intro);
-  else setUpLanding();
-};
-
-const zoomOut = () => {
-  landing.removeClass("zoom");
-  parStars.removeClass("zoom");
-};
-
-const setUpLanding = () => {
-  landing.removeClass("t");
-  landing.on("mousemove", createParallax);
-};
-
-const prepareLanding = () => {
+  startShooting();
   generateStars();
-  title.removeClass("hidden");
   dropStars();
+  landingPage.on("mousemove", createParallax);
 };
 
 const createParallax = (e) => {
@@ -99,7 +86,8 @@ const moveStars = (el, x, y, n) => {
 
 const shootingStar = () => {
   // chance star will shoot
-  if (Rand.num() < 0.6 || !document.hasFocus()) return;
+  const sstar = $(".star.shooting");
+  if (Rand.num() < 0.6 || !document.hasFocus() || sstar) return;
 
   const star = landing.build({
     tag: "div",
@@ -125,41 +113,45 @@ const shoot = (star) => {
   transform = transform.join(" ");
 
   star.style.transform = `${transform} translateX(${tx}vmax) ${scale}`;
-  
+
   // distance sstar travels
-  if (tx < 120) requestAnimationFrame(shoot.bind(null, star)); 
+  if (tx < 120) requestAnimationFrame(shoot.bind(null, star));
   else star.remove();
 };
 
 const startShooting = () => {
   // interval between attempting to shoot star
-  shooting = setInterval(shootingStar, 4000); 
+  shooting = setInterval(shootingStar, 2000);
 };
 
-const dropStars = () => {
+const dropStars = () =>
   document.on("scroll", () => {
-    const y = pageYOffset,
-      h = innerHeight,
-      w = innerWidth,
-      stars = $$(".star"),
-      fall = ["falling1", "falling2", "falling3", "falling4", "falling5"];
-
-    if (y > h * 0.2) {
-      clearInterval(shooting);
-      shooting = false;
-    } else {
-      if (!shooting) startShooting();
-    }
-
-    if (y > h * 0.6) {
-      stars.forEach((s) => {
-        s.addClass(Rand.choice(fall));
-        setTimeout(() => s.remove(), 4000);
-      });
-    } else {
-      if (stars.length < 20) generateStars();
-    }
+    setTimeout(positionHandler, 100);
   });
+
+const positionHandler = () => {
+  const h = innerHeight,
+    y = pageYOffset,
+    stars = $$(
+      ".star:not(.shooting, .falling1, .falling2, .falling3, .falling4, .falling5)"
+    ),
+    fall = ["falling1", "falling2", "falling3", "falling4", "falling5"];
+
+  if (y > h * 0.2) {
+    clearInterval(shooting);
+    shooting = false;
+  } else {
+    if (!shooting) startShooting();
+  }
+
+  if (y > h * 0.6) {
+    stars.forEach((s) => {
+      s.addClass(Rand.choice(fall));
+      setTimeout(() => s.remove(), 4000);
+    });
+  } else {
+    if (stars.length < 20) generateStars();
+  }
 };
 
 const grow = (x) => 5 + 0.58 * x;
